@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const AxiosInstance = axios.create({
-  baseURL: "http://localhost:5161/",
+  baseURL: "https://coffeemanagementbackend-bgdjbpgmc8e0b4ec.eastus-01.azurewebsites.net/",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
@@ -34,7 +34,7 @@ AxiosInstance.interceptors.response.use(
       setTimeout(() => {
         window.location.href = "/login";
     }, 1500);
-      
+    error.isHandled = true;
     }
     return Promise.reject(error);
   }

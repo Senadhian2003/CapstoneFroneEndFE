@@ -40,7 +40,7 @@ function AdminActiveOrder() {
   }
   const fetchActiveOrders = () => {
     axiosInstance
-      .get(`http://localhost:5007/api/Order/GetAllActiveOrders`)
+      .get(`api/Order/GetAllActiveOrders`)
       .then((response) => {
         setIsLoading(false)
         console.log(response.data);
@@ -53,11 +53,12 @@ function AdminActiveOrder() {
         setIsError(true)
         console.log("Error: " + error);
 
-        if (error.response && error.response.data && error.response.data.message) {
-          toast.warn(error.response.data.message)
-        } 
-        else{
-          toast.error("Server error please try again later")
+        if (!error.isHandled) {
+          if (error.response && error.response.data && error.response.data.message) {
+            toast.warn(error.response.data.message);
+          } else {
+            toast.error("Server error please try again later");
+          }
         }
       });
   };
@@ -95,7 +96,7 @@ function AdminActiveOrder() {
 
   let updateOrderStatus = (orderId, statusId, status)=>{
     console.log("clicked");
-    axiosInstance.put('http://localhost:5007/api/Order/UpdateOrderDetails',{
+    axiosInstance.put('api/Order/UpdateOrderDetails',{
       "orderId": orderId,
   "statusId": statusId,
   "status": status
@@ -106,11 +107,12 @@ function AdminActiveOrder() {
     })
     .catch((error)=>{
       console.log("Error : " + error);
-      if (error.response && error.response.data && error.response.data.message) {
-        toast.warn(error.response.data.message)
-      } 
-      else{
-        toast.error("Server error please try again later")
+      if (!error.isHandled) {
+        if (error.response && error.response.data && error.response.data.message) {
+          toast.warn(error.response.data.message);
+        } else {
+          toast.error("Server error please try again later");
+        }
       }
     })
 
@@ -163,7 +165,7 @@ function AdminActiveOrder() {
                     type="text"
                     style={{ marginTop: "22px" }}
                     id="searchInput"
-                    class="form-control input-text"
+                    class="form-control input-text display-none"
                     placeholder="Search..."
                     aria-label="Search"
                     value={searchInput}
@@ -174,7 +176,7 @@ function AdminActiveOrder() {
 
               </div>
 
-              <div className="container-fluid">
+              <div className="container-fluid table-responsive">
                 <table
                   id="table-detail"
                   className="table poppins-medium"
@@ -183,9 +185,10 @@ function AdminActiveOrder() {
                   <thead>
                     <tr>
                       <td scope="col">Order ID</td>
+                      <td scope="col">User Name</td>
                       <td scope="col" className="text-center">Total no of Items</td>
                       <td scope="col" className="text-center">
-                        Items Received
+                        Items Served
                       </td>
                       <td scope="col" className="text-center">
                         Status
@@ -202,6 +205,7 @@ function AdminActiveOrder() {
                           aria-expanded="false"
                         >
                           <td>{order.orderId}</td>
+                          <td>{order.user.name}</td>
                           <td className="text-center">{order.totalItems}</td>
                           <td className="text-center">{order.itemsServed}</td>
                           <td className="text-center">{order.orderStatus}</td>

@@ -77,7 +77,11 @@ function EmptyOrderHistory() {
               </tr>
             </thead>
             <tbody>
-              
+            <tr>
+        <td colSpan="4" style={{ textAlign: "center" }}>
+          <img src={emptyDataImg} alt="" />
+        </td>
+      </tr>
             </tbody>
             <tfoot>
               

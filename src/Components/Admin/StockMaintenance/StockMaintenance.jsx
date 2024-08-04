@@ -18,7 +18,7 @@ function StockMaintenance() {
   },[])
 
   let fetchCoffeeData = ()=>{
-    axios.get('http://localhost:5007/api/Coffee/GetAllCoffees')
+    axiosInstance.get('api/Coffee/GetAllCoffees')
     .then( (response)=> {
       // handle success
       setIsLoading(false)

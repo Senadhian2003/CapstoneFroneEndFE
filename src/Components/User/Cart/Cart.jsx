@@ -11,6 +11,7 @@ import LoadingComponentUser from "../../LoadingAnimation/LoadingComponentUser";
 import EmptyCartComponent from "./EmptyCartComponent";
 
 function Cart() {
+  const [isBtnLoading, setIsBtnLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [data, setData] = useState([])
@@ -28,7 +29,7 @@ function Cart() {
   },[])
 
   let getCartItems = ()=>{
-    axiosInstance.get(`http://localhost:5007/api/Cart/GetCartItems`)
+    axiosInstance.get(`api/Cart/GetCartItems`)
     .then((response)=>{
       setIsLoading(false)
       console.log(response.data)
@@ -49,11 +50,12 @@ function Cart() {
      
 
       
-      if (error.response && error.response.data && error.response.data.message) {
-        toast.warn(error.response.data.message)
-      } 
-      else{
-        toast.error("Server error please try again later")
+      if (!error.isHandled) {
+        if (error.response && error.response.data && error.response.data.message) {
+          toast.warn(error.response.data.message);
+        } else {
+          toast.error("Server error please try again later");
+        }
       }
 
     });
@@ -64,23 +66,26 @@ function Cart() {
   let checkout = ()=>{
 
     // console.log("CLICKED")
-
-    axiosInstance.post(`http://localhost:5007/api/Cart/CheckoutCart`)
+    setIsBtnLoading(true);
+    axiosInstance.post(`api/Cart/CheckoutCart`)
     .then((response)=>{
       console.log(response.data)
-      alert("Order placed successfully")
+      toast.success("Order placed successfully")
       navigate('/activeOrderHistory')
     })
     .catch(function (error) {
       // console.log(error);
 
-      if (error.response && error.response.data && error.response.data.message) {
-        toast.warn(error.response.data.message)
-      } 
-      else{
-        toast.error("Server error please try again later")
+      if (!error.isHandled) {
+        if (error.response && error.response.data && error.response.data.message) {
+          toast.warn(error.response.data.message);
+        } else {
+          toast.error("Server error please try again later");
+        }
       }
 
+    }).finally(() => {
+      setIsBtnLoading(false); // Set loading state to false
     });
 
 
@@ -157,8 +162,19 @@ function Cart() {
                     onClick={checkout}
                     id="checkout-btn"
                     style={{ width: "100%" }}
+                    disabled={isBtnLoading}
                   >
-                    Checkout
+                    
+
+                    {isBtnLoading ? (
+    <>
+      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      <span className="visually-hidden">Loading...</span>
+    </>
+  ) : (
+    "Checkout"
+  )}
+
                   </button>
                 </div>
               </div>

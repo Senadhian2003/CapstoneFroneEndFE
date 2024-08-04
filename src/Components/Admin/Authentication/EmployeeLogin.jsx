@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import { useNavigate } from 'react-router-dom';
-
+import axiosInstance from "../../Axios/AxiosInstanceAdmin";
 import logo from "../../../Images/User/logo.png";
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -9,7 +9,7 @@ function EmployeeLogin() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("")
-
+  const [isBtnLoading, setIsBtnLoading] = useState(false);
   const [validationMessages, setValidationMessages] = useState({
     userEmail : "",
     password : ""
@@ -60,8 +60,8 @@ function EmployeeLogin() {
     flag = flag & validatePassword()
 
     if(flag){
-
-      axios.post('http://localhost:5007/api/Authentication/EmployeeLogin',{
+      setIsBtnLoading(true);
+      axiosInstance.post('api/Authentication/EmployeeLogin',{
         "email": email,
         "password": password
       })
@@ -74,13 +74,16 @@ function EmployeeLogin() {
       })
       .catch((error)=>{
         console.log("Error : " + error)
-        if (error.response && error.response.data && error.response.data.message) {
-          toast.warn(error.response.data.message)
-        } 
-        else{
-          toast.error("Server error please try again later")
+        if (!error.isHandled) {
+          if (error.response && error.response.data && error.response.data.message) {
+            toast.warn(error.response.data.message);
+          } else {
+            toast.error("Server error please try again later");
+          }
         }
-      })
+      }).finally(() => {
+        setIsBtnLoading(false); // Set loading state to false
+      });
 
 
     }
@@ -96,7 +99,7 @@ function EmployeeLogin() {
     <div className='login-center'>
        <div class="login-container">
         <div class="logo" style={{textAlign: "center", width: "100%", marginLeft: "auto", marginRight: "auto"}}>
-            <a  class="navbar-brand " style={{marginTop: "8px", textAlign:"center"}} href="/">
+            <a  class="navbar-brand " style={{marginTop: "8px", textAlign:"center"}} href="/AdminActiveOrder">
                 <img src={logo} style={{height: "40px"}} alt="Logo" />
                 <p
                   class="poppins-semibold"
@@ -112,9 +115,16 @@ function EmployeeLogin() {
             <small id="passwordHelp" className={validationMessages.userEmail == "Accepted" ? "text-success" : "text-danger"} > {validationMessages.userEmail} </small>
             <input type="password" className='login-input' onChange={(e)=>setPassword(e.target.value)} placeholder="Password" onBlur={validatePassword} id="user-password" required/>
             <small id="passwordHelp" className={validationMessages.password == "Accepted" ? "text-success" : "text-danger"} > {validationMessages.password} </small>
-            <button type="button" class="login-btn" onClick={loginUser} id="login-btn">Login</button>
+            <button type="button" class="login-btn" onClick={loginUser} id="login-btn"  disabled={isBtnLoading}>{isBtnLoading ? (
+    <>
+      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      <span className="visually-hidden">Loading...</span>
+    </>
+  ) : (
+    "Login"
+  )}</button>
         </form>
-        <button onclick="location.href='register.html'" class="register-btn">Register</button>
+      
     </div>
     </div>
   )

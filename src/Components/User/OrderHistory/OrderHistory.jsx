@@ -28,7 +28,7 @@ function OrderHistory() {
 
   const fetchOrders = () => {
     axiosInstance
-      .get(`http://localhost:5007/api/Order/GetMyOrders`)
+      .get(`api/Order/GetMyOrders`)
       .then((response) => {
         setIsLoading(false)
         console.log(response.data);
@@ -39,11 +39,12 @@ function OrderHistory() {
         setIsLoading(false)
         setIsError(true)
         console.log("Error: " + error);
-        if (error.response && error.response.data && error.response.data.message) {
-          toast.warn(error.response.data.message)
-        } 
-        else{
-          toast.error("Server error please try again later")
+        if (!error.isHandled) {
+          if (error.response && error.response.data && error.response.data.message) {
+            toast.warn(error.response.data.message);
+          } else {
+            toast.error("Server error please try again later");
+          }
         }
       });
   };
@@ -138,28 +139,28 @@ function OrderHistory() {
                 </div>
                 <div className="nav-items d-flex align-items-center">
                   <div className="date-pickers me-3">
-                    <label htmlFor="fromDate" style={{ display: 'inline' }}>
+                    <label htmlFor="fromDate" className="display-none" style={{ display: 'inline' }}>
                       {' '}
                       From
                     </label>
                     <input
                       type="date"
                       id="fromDate"
-                      className="form-control me-2"
+                      className="form-control me-2 display-none" 
                       placeholder="From Date"
                       value={fromDate}
                       onChange={(e) => setFromDate(e.target.value)}
                     />
                   </div>
                   <div className="date-pickers me-3">
-                    <label htmlFor="toDate" style={{ display: 'inline' }}>
+                    <label htmlFor="toDate" className="display-none" style={{ display: 'inline' }}>
                       {' '}
                       To
                     </label>
                     <input
                       type="date"
                       id="toDate"
-                      className="form-control me-2"
+                      className="form-control me-2 display-none"
                       placeholder="To Date"
                       value={toDate}
                       onChange={(e) => setToDate(e.target.value)}
@@ -168,7 +169,7 @@ function OrderHistory() {
                 </div>
               </div>
 
-              <div className="container-fluid">
+              <div className="container-fluid table-responsive">
                 <table
                   id="table-detail"
                   className="table poppins-medium"

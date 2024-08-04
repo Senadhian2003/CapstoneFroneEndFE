@@ -93,7 +93,7 @@ function Card(props) {
     
     if (flag) {
       
-      axiosInstance.put('http://localhost:5007/api/Coffee/UpdateCoffeeDetails',{
+      axiosInstance.put('api/Coffee/UpdateCoffeeDetails',{
         "coffeeId": props.data.id,
   "name": coffeeName,
   "description": description,
@@ -109,12 +109,13 @@ function Card(props) {
       .catch((error)=>{
         console.log("Error : "+ error)
 
-        if (error.response && error.response.data && error.response.data.message) {
-          toast.warn(error.response.data.message)
-      } 
-      else{
-        toast.error("Server error please try again later")
-      }
+        if (!error.isHandled) {
+          if (error.response && error.response.data && error.response.data.message) {
+            toast.warn(error.response.data.message);
+          } else {
+            toast.error("Server error please try again later");
+          }
+        }
 
       })
 

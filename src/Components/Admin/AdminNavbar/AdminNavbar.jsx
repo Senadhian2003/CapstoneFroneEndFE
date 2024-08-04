@@ -19,7 +19,7 @@ function AdminNavbar() {
       
       <nav class="navbar navbar-expand-lg">
           <div class="container">
-            <a class="navbar-brand d-flex" style={{marginTop: "8px"}} href="/">
+            <a class="navbar-brand d-flex" style={{marginTop: "8px"}} href="/AdminActiveOrder">
               <img src={Logo} alt="Logo" />
               <p
                 class="poppins-bold"

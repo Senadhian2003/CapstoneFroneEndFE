@@ -3,16 +3,18 @@ import axios from 'axios';
 import {useState,useEffect} from 'react';
 import Navbar from "../Navbar/Navbar";
 import "./Products.css";
+import axiosInstance from "../../Axios/AxiosInstance";
 import Cappuccino from "../../../Images/User/Cappuccino.webp";
 import Card from "./Card";
 import LoadingComponentUser from "../../LoadingAnimation/LoadingComponentUser";
+import { toast } from "react-toastify";
 function Products() {
   const [query, setQuery] = useState("");
   const [coffees, setCoffees] = useState(null);
 
   useEffect(()=>{
 
-    axios.get('http://localhost:5007/api/Coffee/GetAllCoffees')
+    axiosInstance.get('api/Coffee/GetAllCoffees')
   .then( (response)=> {
     // handle success
     console.log(response.data);
@@ -21,6 +23,7 @@ function Products() {
   .catch(function (error) {
     // handle error
     console.log(error);
+    toast.error("Error displaying data")
   })
   
   },[])

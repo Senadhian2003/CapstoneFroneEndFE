@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './Authentication.css'
 import logo from "../../../Images/User/logo.png";
 import axios from 'axios';
+import axiosInstance from "../../Axios/AxiosInstance";
 import { toast } from 'react-toastify';
 function Login() {
   
@@ -61,7 +62,7 @@ function Login() {
 
     if(flag){
       setIsBtnLoading(true);
-      axios.post('http://localhost:5007/api/Authentication/Login',{
+      axiosInstance.post('api/Authentication/Login',{
         "email": email,
         "password": password
       })
@@ -131,7 +132,7 @@ function Login() {
   )}
 </button>
         </form>
-        <button onclick="location.href='register.html'" class="register-btn">Register</button>
+      <a href="/register"><button onclick="'" class="register-btn">Register</button></a>  
     </div>
     </div>
   )

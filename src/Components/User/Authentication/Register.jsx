@@ -4,9 +4,11 @@ import './Authentication.css'
 import logo from "../../../Images/User/logo.png";
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import axiosInstance from "../../Axios/AxiosInstance";
 function Register() {
   
   const navigate = useNavigate();
+  const [isBtnLoading, setIsBtnLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("")
@@ -143,13 +145,14 @@ function Register() {
   let registerUser = ()=>{
 
     let flag = true;
-
+    flag = flag & validateName();
     flag = flag & validateEmail();
-    flag = flag & validatePassword()
+    flag = flag & validatePassword();
+    flag = flag & validatePhone();
 
     if(flag){
-
-      axios.post('http://localhost:5007/api/Authentication/Register',{
+      setIsBtnLoading(true);
+      axiosInstance.post('api/Authentication/Register',{
         "name": name,
         "email": email,
         "phone": phone,
@@ -159,12 +162,15 @@ function Register() {
       .then((response)=>{
         console.log(response.data)
         toast.success("Registeration successul")
-        navigate('/')
+        navigate('/login')
       })
       .catch((error)=>{
         console.log("Error : " + error)
        
       })
+      .finally(() => {
+        setIsBtnLoading(false); // Set loading state to false
+      });
 
 
     }
@@ -206,9 +212,16 @@ function Register() {
             <input type="text" className='login-input' value={phone} onChange={handlePhoneChange} placeholder="Mobile number" id="user-id"  onBlur={validatePhone} pattern="[0-9]*" inputmode="numeric" required/>
             <small id="passwordHelp" className={validationMessages.phone == "Accepted" ? "text-success" : "text-danger"} > {validationMessages.phone} </small>
 
-            <button type="button" class="login-btn" onClick={registerUser} id="login-btn">Register</button>
+            <button type="button" class="login-btn" onClick={registerUser} id="login-btn" disabled={isBtnLoading}>{isBtnLoading ? (
+    <>
+      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      <span className="visually-hidden">Loading...</span>
+    </>
+  ) : (
+    "Register"
+  )}</button>
         </form>
-        <button onclick="location.href='register.html'" class="register-btn">Login</button>
+       <a href="/login"> <button  class="register-btn">Login</button></a>
     </div>
     </div>
   )

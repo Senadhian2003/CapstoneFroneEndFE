@@ -5,7 +5,7 @@ function Card(props) {
   return (
    
       <div className="col-lg-4 col-md-6 col-sm-12 mb-4">
-        <a href={`/ProductDetail/${props.data.id}`}>
+       
               <div className="coffee-card-item">
                 <div className="row">
                   <div className="col-4">
@@ -29,13 +29,14 @@ function Card(props) {
 
                     <div className="d-flex justify-content-between">
                       <p className="poppins-bold price"> $ {props.data.price} </p>
-                      {props.data.isAvailable==0 ? <small className="text-danger" >Out Of Stock</small> : <button class="btn blue">Buy</button>}
                       
+                      {props.data.isAvailable==0 ? <small className="text-danger" style={{marginRight:"20px"}} >Out Of Stock</small> : <a href={`/ProductDetail/${props.data.id}`}><button class="btn blue">Buy</button>  </a>}
+                    
                     </div>
                   </div>
                 </div>
               </div>
-              </a>
+            
             </div>
    
   )

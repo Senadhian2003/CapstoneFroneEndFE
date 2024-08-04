@@ -21,7 +21,7 @@ function ActiveOrderHistory() {
 
   const fetchActiveOrders = () => {
     axiosInstance
-      .get(`http://localhost:5007/api/Order/GetMyActiveOrders`)
+      .get(`api/Order/GetMyActiveOrders`)
       .then((response) => {
         setIsLoading(false)
         console.log(response.data);
@@ -30,11 +30,12 @@ function ActiveOrderHistory() {
       .catch((error) => {
         setIsLoading(false)
         setIsError(true)
-        if (error.response && error.response.data && error.response.data.message) {
-          toast.warn(error.response.data.message)
-        } 
-        else{
-          toast.error("Server error please try again later")
+        if (!error.isHandled) {
+          if (error.response && error.response.data && error.response.data.message) {
+            toast.warn(error.response.data.message);
+          } else {
+            toast.error("Server error please try again later");
+          }
         }
       });
   };
@@ -110,7 +111,7 @@ function ActiveOrderHistory() {
                 </div>
               </div>
 
-              <div className="container-fluid">
+              <div className="container-fluid table-responsive">
                 <table
                   id="table-detail"
                   className="table poppins-medium"

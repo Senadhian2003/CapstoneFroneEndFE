@@ -3,12 +3,13 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
 import "./ProductDetail.css";
-import Cappuccino from "../../../Images/User/M107777.webp";
+import Cappuccino from "../../../Images/User/Cappuccino.webp";
 import axiosInstance from "../../Axios/AxiosInstance";
 import { toast } from "react-toastify";
 import LoadingComponentUser from "../../LoadingAnimation/LoadingComponentUser";
 
 function ProductDetail() {
+  const [isBtnLoading, setIsBtnLoading] = useState(false);
   const [productDetail, setProductDetail] = useState(null);
   const [selectedCapacity, setSelectedCapacity] = useState(null);
   const [selectedMilk, setSelectedMilk] = useState(null);
@@ -28,7 +29,7 @@ function ProductDetail() {
 
   useEffect(() => {
     axiosInstance
-      .get(`http://localhost:5007/api/Coffee/GetCoffeeDetails?coffeeId=${id}`)
+      .get(`api/Coffee/GetCoffeeDetails?coffeeId=${id}`)
       .then((response) => {
         console.log(response.data)
         // coffeePrice = response.data.price
@@ -37,12 +38,14 @@ function ProductDetail() {
         setSelectedCapacity(response.data.allowedCapacities[0].capacity.capacityName);
         setCapacityPrice(response.data.allowedCapacities[0].capacity.price)
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {console.log(error)
+        toast.warn("Error in displaying data")
+      });
   }, [id]);
 
   const submitItemToCart = ()=>{
-
-    axiosInstance.post('http://localhost:5007/api/Cart/AddCoffeeToCart', {
+    setIsBtnLoading(true);
+    axiosInstance.post('api/Cart/AddCoffeeToCart', {
       "coffeeId": id,
       "addOn": generateAddOnsString,
       "price": finalPrice
@@ -53,17 +56,18 @@ function ProductDetail() {
     })
     .catch(function (error) {
       console.log(error);
-      console.log(error.response.data.message);
-      console.log(error.response.data.errorCode);
 
       
-      if (error.response && error.response.data && error.response.data.message) {
-        toast.warn(error.response.data.message)
-      } 
-      else{
-        toast.error("Server error please try again later")
+      if (!error.isHandled) {
+        if (error.response && error.response.data && error.response.data.message) {
+          toast.warn(error.response.data.message);
+        } else {
+          toast.error("Server error please try again later");
+        }
       }
 
+    }).finally(() => {
+      setIsBtnLoading(false); // Set loading state to false
     });
 
 
@@ -315,8 +319,18 @@ function ProductDetail() {
             </p>
           </div>
           <div className="d-flex justify-content-end">
-            <button className="btn green " onClick={submitItemToCart}>
-              <div className="poppins-semibold">Add Item</div>
+            <button className="btn green " onClick={submitItemToCart} disabled={isBtnLoading}>
+
+            {isBtnLoading ? (
+    <>
+      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      <span className="visually-hidden">Loading...</span>
+    </>
+  ) : (
+    <div className="poppins-semibold">Add Item</div>
+  )}
+
+             
             </button>
           </div>
         </div>

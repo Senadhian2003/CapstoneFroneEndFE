@@ -21,7 +21,7 @@ function CartCard(props) {
 
     let updateCartItemQuantity = ()=>{
         console.log("Changed")
-        axiosInstance.put('http://localhost:5007/api/Cart/UpdateCartItemQuantity',{
+        axiosInstance.put('api/Cart/UpdateCartItemQuantity',{
             
                 "cartItemId": data.cartItemId,
                 "quantity": quantity
@@ -34,11 +34,12 @@ function CartCard(props) {
         .catch(function (error) {
           // console.log(error);
           
-          if (error.response && error.response.data && error.response.data.message) {
-            toast.warn(error.response.data.message)
-          } 
-          else{
-            toast.error("Server error please try again later")
+          if (!error.isHandled) {
+            if (error.response && error.response.data && error.response.data.message) {
+              toast.warn(error.response.data.message);
+            } else {
+              toast.error("Server error please try again later");
+            }
           }
     
         });
@@ -59,6 +60,11 @@ function CartCard(props) {
       };
 
       const handleRepeatOrder = () => {
+
+        if(quantity==2){
+          toast("Discount applied")
+        }
+
         setQuantity(quantity + 1);
         setShowModal(false);
         // You may want to call an API to update the cart on the server
@@ -74,7 +80,7 @@ function CartCard(props) {
 
   let deleteCartItem = (cartItemId)=>{
     console.log("Clicked")
-    axiosInstance.delete(`http://localhost:5007/api/Cart/DeleteCartItem?cartItemId=${cartItemId}`)
+    axiosInstance.delete(`api/Cart/DeleteCartItem?cartItemId=${cartItemId}`)
     .then((response)=>{
       console.log(response.data);
       toast.success("Cart item deleted")
@@ -84,12 +90,12 @@ function CartCard(props) {
       // console.log(error);
       
    
-      
-      if (error.response && error.response.data && error.response.data.message) {
-        toast.warn(error.response.data.message)
-      } 
-      else{
-        toast.error("Server error please try again later")
+      if (!error.isHandled) {
+        if (error.response && error.response.data && error.response.data.message) {
+          toast.warn(error.response.data.message);
+        } else {
+          toast.error("Server error please try again later");
+        }
       }
 
     });
@@ -122,6 +128,7 @@ function CartCard(props) {
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
+                        backgroundImage: `url('${data.coffee.imageURL || Cappuccino}')`
                       }}
                     >
                       
@@ -168,7 +175,7 @@ function CartCard(props) {
                             +
                           </button>
                         </div>
-                        <div><a > <p className="cutomize-text" >Customize</p></a></div>
+                        {/* <div><a > <p className="cutomize-text" >Customize</p></a></div> */}
                         
                       </div>
                     </div>

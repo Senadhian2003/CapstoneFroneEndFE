@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from "../AdminNavbar/AdminNavbar";
 import logo from "../../../Images/User/logo.png";
 import axios from 'axios';
+import axiosInstance from "../../Axios/AxiosInstanceAdmin";
 import { toast } from 'react-toastify';
 
 function EmployeeRegister() {
   const navigate = useNavigate();
+  const [isBtnLoading, setIsBtnLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -112,11 +114,14 @@ function EmployeeRegister() {
 
   const registerUser = () => {
     let flag = true;
+    flag = flag & validateName();
     flag = flag & validateEmail();
     flag = flag & validatePassword();
+    flag = flag & validatePhone();
 
     if (flag) {
-      axios.post('http://localhost:5007/api/Authentication/RegisterEmployee', {
+      setIsBtnLoading(true);
+      axiosInstance.post('api/Authentication/RegisterEmployee', {
         name: name,
         email: email,
         phone: phone,
@@ -125,11 +130,24 @@ function EmployeeRegister() {
       })
         .then((response) => {
           toast.success("Registration successful");
-          navigate('/');
+          navigate('/AdminActiveOrder');
         })
         .catch((error) => {
           console.log("Error: " + error);
+
+          if (!error.isHandled) {
+            if (error.response && error.response.data && error.response.data.message) {
+              toast.warn(error.response.data.message);
+            } else {
+              toast.error("Server error please try again later");
+            }
+          }
+
+        }).finally(() => {
+          setIsBtnLoading(false); // Set loading state to false
         });
+        
+        
     } else {
       toast.warn("Please enter correct details");
     }
@@ -172,7 +190,17 @@ function EmployeeRegister() {
 
             </div>
 
-            <button type="button" className="login-btn" onClick={registerUser} id="login-btn">Add Employee</button>
+            <button type="button" className="login-btn" onClick={registerUser} id="login-btn"  disabled={isBtnLoading}>
+
+            {isBtnLoading ? (
+    <>
+      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      <span className="visually-hidden">Loading...</span>
+    </>
+  ) : (
+    "Add Employee"
+  )}
+            </button>
           </form>
         </div>
       </div>

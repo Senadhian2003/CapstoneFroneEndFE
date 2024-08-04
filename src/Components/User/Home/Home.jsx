@@ -31,7 +31,7 @@ function Home() {
                 where you can effortlessly find <br /> and savor your favorite coffee blends. ☕
             </p>
           </a>
-          <button class="btn blue">Start now</button>
+          <a href="/products"><button class="btn blue">Start now</button></a>
         </div>
 
       {/* Features */}
@@ -108,18 +108,18 @@ function Home() {
 
             <div class="col-md-6 col padding">
               <p class="heading">
-                <span>Order </span> your favorite coffee quickly on Java Haven!
+                <span>Order </span> your favorite coffee quickly on Brew Bros!
               </p>
 
               <p class="plus-jakarta-sans-Medium content">
-              Placing and enjoying your favorite coffee has never been easier. An integrated digital store that's simple to use, Java Haven lets you spend less time waiting and more time savoring your brew!
+              Placing and enjoying your favorite coffee has never been easier. An integrated digital store that's simple to use, Brew Bros lets you spend less time waiting and more time savoring your brew!
               </p>
 
               <br />
               <p class="plus-jakarta-sans-Medium content">
-              Effortless orders, delightful ambiance—Java Haven transforms your coffee experience, making every visit a pleasure~
+              Effortless orders, delightful ambiance Brew Bros transforms your coffee experience, making every visit a pleasure~
               </p>
-              <button class="btn blue">Buy now</button>
+            <a href="/products"> <button class="btn blue">Buy now</button></a> 
             </div>
           </div>
           <div class="row"style={{marginTop: "120px"}}>
@@ -130,14 +130,14 @@ function Home() {
               </p>
 
               <p class="plus-jakarta-sans-Medium content">
-              Ordering and customizing your favorite coffee has never been easier. An integrated digital store that's simple to use, Java Haven lets you spend less time waiting and more time enjoying your perfect cup!
+              Ordering and customizing your favorite coffee has never been easier. An integrated digital store that's simple to use, Brew Bros lets you spend less time waiting and more time enjoying your perfect cup!
               </p>
 
               <br />
               <p class="plus-jakarta-sans-Medium content">
-              Effortless orders, personalized brews—Java Haven transforms your coffee experience, letting you savor every moment~
+              Effortless orders, personalized Brew Bros transforms your coffee experience, letting you savor every moment~
               </p>
-          <a href="./Books.html"> <button class="btn blue">Buy now</button></a>   
+          <a href="/products"> <button class="btn blue">Buy now</button></a>   
             </div>
 
             <div class="col-md-6 col order-md-2 order-1 text-center">

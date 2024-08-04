@@ -93,6 +93,22 @@
     margin-right: auto;
   }
   
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  @media screen and (max-width: 968px) {
+    .table-responsive table {
+      width: 100%;
+      min-width: 500px; /* Adjust based on your table's minimum width */
+    }
+    .display-none{
+      display: none !important;
+    }
+  }
+
+
   .nav-table {
     display: flex;
     justify-content: space-between;

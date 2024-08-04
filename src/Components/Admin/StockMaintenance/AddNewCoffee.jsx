@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../AdminNavbar/AdminNavbar";
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { toast } from "react-toastify";
 import axiosInstance from "../../Axios/AxiosInstanceAdmin";
 import LoadingComponentUser from "../../LoadingAnimation/LoadingComponentUser";
 function AddNewCoffee() {
-
+  const navigate = useNavigate();
+  const [isBtnLoading, setIsBtnLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
   const [data, setData] = useState();
@@ -34,19 +36,20 @@ function AddNewCoffee() {
 
   useEffect(() => {
     axiosInstance
-      .get("http://localhost:5007/api/Coffee/GetAllAddOns")
+      .get("api/Coffee/GetAllAddOns")
       .then((response) => {
         console.log(response.data);
         setData(response.data);
       })
       .catch((error) => {
         console.log(error);
-        if (error.response && error.response.data && error.response.data.message) {
-          toast.warn(error.response.data.message)
-      } 
-      else{
-        toast.error("Server error please try again later")
-      }
+        if (!error.isHandled) {
+          if (error.response && error.response.data && error.response.data.message) {
+            toast.warn(error.response.data.message);
+          } else {
+            toast.error("Server error please try again later");
+          }
+        }
       });
   }, []);
 
@@ -303,6 +306,7 @@ function AddNewCoffee() {
 
 
   const AddNewCoffee = () => {
+    
     let flag = true;
   
     flag = flag & validateName();
@@ -333,8 +337,8 @@ function AddNewCoffee() {
     }
     if (flag) {
       
-
-      axiosInstance.post('http://localhost:5007/api/Coffee/addNewCoffee',formData,{
+      setIsBtnLoading(true);
+      axiosInstance.post('api/Coffee/addNewCoffee',formData,{
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -342,6 +346,7 @@ function AddNewCoffee() {
       .then((response)=>{
         console.log(response)
         toast.success("New coffee added successfully")
+        navigate('/StockMaintenance')
       })
       .catch((error)=>{
         console.log("Error : "+ error)
@@ -353,7 +358,9 @@ function AddNewCoffee() {
         toast.error("Server error please try again later")
       }
 
-      })
+      }).finally(() => {
+        setIsBtnLoading(false); // Set loading state to false
+      });
 
     
       
@@ -680,8 +687,17 @@ function AddNewCoffee() {
 
               }
 
-              <button type="button" id="addBookBtn" class="btn blue" onClick={AddNewCoffee}>
-                Submit
+              <button type="button" id="addBookBtn" class="btn blue" onClick={AddNewCoffee}  disabled={isBtnLoading}>
+                
+
+                {isBtnLoading ? (
+    <>
+      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      <span className="visually-hidden">Loading...</span>
+    </>
+  ) : (
+    "Submit"
+  )}
               </button>
             </form>
           </div>
