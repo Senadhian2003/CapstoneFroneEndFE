@@ -161,7 +161,7 @@ function ProductDetail() {
         <p className="plus-jakarta-sans-Regular product-detail-content">{productDetail.description}</p>
         
         {/* Size selection */}
-        <div>
+        <div style={{marginTop:"33px"}}>
           <h2 className="plus-jakarta-sans-Bold product-detail-subheading">Size</h2>
           <div className="d-flex">
             {productDetail.allowedCapacities.map((element) => (
