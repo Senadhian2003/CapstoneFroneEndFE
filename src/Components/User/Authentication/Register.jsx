@@ -67,6 +67,13 @@ function Register() {
         password: "Password cannot be empty"
       }));
       return false;
+    }
+    else if(password.length<5) {
+      setValidationMessages((prevState) => ({
+        ...prevState,
+        password: "Password length cannot be less than 5"
+      }));
+      return false;
     } else {
       setValidationMessages((prevState) => ({
         ...prevState,
@@ -92,7 +99,7 @@ function Register() {
         ...prevState,
         confirmPassword : "Password and confirm password do not match"
       }))
-
+      return false
     }
     else {
       setValidationMessages((prevState) => ({
@@ -148,6 +155,7 @@ function Register() {
     flag = flag & validateName();
     flag = flag & validateEmail();
     flag = flag & validatePassword();
+    flag = flag & validateConfirmPassword();
     flag = flag & validatePhone();
 
     if(flag){

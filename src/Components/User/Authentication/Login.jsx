@@ -111,7 +111,7 @@ function Login() {
         </div>
         <form>
            
-            <input type="text" className='login-input' onChange={(e)=>setEmail(e.target.value)} placeholder="User ID" id="user-id"  onBlur={validateEmail} pattern="[0-9]*" inputmode="numeric" required/>
+            <input type="text" className='login-input' onChange={(e)=>setEmail(e.target.value)} placeholder="User Email" id="user-id"  onBlur={validateEmail} pattern="[0-9]*" inputmode="numeric" required/>
             <small id="passwordHelp" className={validationMessages.userEmail == "Accepted" ? "text-success" : "text-danger"} > {validationMessages.userEmail} </small>
             <input type="password" className='login-input' onChange={(e)=>setPassword(e.target.value)} placeholder="Password" onBlur={validatePassword} id="user-password" required/>
             <small id="passwordHelp" className={validationMessages.password == "Accepted" ? "text-success" : "text-danger"} > {validationMessages.password} </small>
